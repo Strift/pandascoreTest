@@ -14,9 +14,23 @@
     <body>
         <h1>Home</h1>
         <div id="app">
-            <input v-model="search" type="text" placeholder="Search champions"/>
+            <input v-model="searchName" type="text" placeholder="Search champions"/>
+
+            <input type="checkbox" id="assassin" value="Assassin" v-model="searchTags">
+            <label for="assassin">Assassin</label>
+            <input type="checkbox" id="fighter" value="Fighter" v-model="searchTags">
+            <label for="fighter">Fighter</label>
+            <input type="checkbox" id="mage" value="Mage" v-model="searchTags">
+            <label for="mage">Mage</label>
+            <input type="checkbox" id="support" value="Support" v-model="searchTags">
+            <label for="support">Support</label>
+            <input type="checkbox" id="tank" value="Tank" v-model="searchTags">
+            <label for="tank">Tank</label>
+            <input type="checkbox" id="marksman" value="Marksman" v-model="searchTags">
+            <label for="marksman">Marksman</label>
+
             <ul>
-                <li v-for="champion in sortedChampionList" v-if="matchesSearch(champion.name)">{{ champion.name }}</li>
+                <li v-for="champion in sortedChampionList" v-if="matchesNameSearch(champion.name) && matchesTagSearch(champion.tags)">{{ champion.name }}</li>
             </ul>
         </div>
 

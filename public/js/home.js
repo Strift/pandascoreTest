@@ -3,7 +3,8 @@ var app = new Vue({
 	el: '#app',
 
 	data: {
-		search: '',
+		searchName: '',
+		searchTags: [],
 		champions: []
 	},
 
@@ -35,8 +36,18 @@ var app = new Vue({
 			});
 		},
 
-		matchesSearch: function(name) {
-			return name.toLowerCase().includes(this.search.toLowerCase());
+		matchesNameSearch: function(name) {
+			return name.toLowerCase().includes(this.searchName.toLowerCase());
+		},
+
+		matchesTagSearch: function(championTags) {
+			var match = true;
+			this.searchTags.forEach(function(tag) {
+				if (championTags.includes(tag) == false) {
+					match = false;
+				}
+			});
+			return match;
 		}
 	}
 
