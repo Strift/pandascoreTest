@@ -48,6 +48,10 @@ var app = new Vue({
 				}
 			});
 			return match;
+		},
+
+		portraitUrl: function(key) {
+			return "http://ddragon.leagueoflegends.com/cdn/7.2.1/img/champion/" + key + ".png";
 		}
 	}
 

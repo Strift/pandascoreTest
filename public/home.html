@@ -30,7 +30,10 @@
             <label for="marksman">Marksman</label>
 
             <ul>
-                <li v-for="champion in sortedChampionList" v-if="matchesNameSearch(champion.name) && matchesTagSearch(champion.tags)">{{ champion.name }}</li>
+                <div v-for="champion in sortedChampionList" v-if="matchesNameSearch(champion.name) && matchesTagSearch(champion.tags)">
+                    <img v-bind:src="portraitUrl(champion.key)"/>
+                    <span>{{ champion.name }}</span>
+                </div>
             </ul>
         </div>
 
