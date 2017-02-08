@@ -6,11 +6,6 @@ var fs 		= require('fs');
 var path 	= require('path');
 
 /*
- * Configuration
- */
-const port = 2020;
-
-/*
  * Data
  */
 const data = JSON.parse(fs.readFileSync('DATA.json'));
@@ -19,6 +14,7 @@ const data = JSON.parse(fs.readFileSync('DATA.json'));
  * Application
  */
 var app = express();
+app.use(express.static('public'));
 
 // Index
 app.get('/', function(req, res) {
@@ -27,10 +23,10 @@ app.get('/', function(req, res) {
 
 // Home page
 app.get('/home', function(req, res) {
-	res.sendFile(path.join(__dirname + '/public/home.html'));
+	res.sendFile(path.join(__dirname, 'public', 'home.html'));
 });
 
 // Start server
-app.listen(port, function() {
-	console.log('App listening on port ' + port);
+app.listen(2020, function() {
+	console.log('Application listening on port ' + 2020);
 });
