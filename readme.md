@@ -92,4 +92,9 @@ sudo systemctl restart nginx
 
 ```
 sudo ufw allow 'Nginx Full'
+
 ```
+
+We're done! Enjoy.
+
+Any issues? Reach me out at lau.cazanove@gmail.com :)
