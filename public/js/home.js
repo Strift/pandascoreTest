@@ -34,7 +34,7 @@ var app = new Vue({
 	methods: {
 
 		/*
-		 * API requests
+		 * Retrieves the champions list from the API
 		 */
 		fetchChampions: function(callback) {
 			this.$http.get('/data/champions').then(function(response) {
@@ -44,6 +44,9 @@ var app = new Vue({
 			});
 		},
 
+		/*
+		 * Retrieves the position rate of the selected champion from the API
+		 */
 		fetchPositions: function(callback) {
 			this.$http.get('/data/champions/' + this.selectedChampion.id + '/positions').then(function(response) {
 				this.positionRate = response.body;
@@ -53,6 +56,9 @@ var app = new Vue({
 			});
 		},
 
+		/*
+		 * Retrieves the pick percentage over time of the selected champion from the API
+		 */
 		fetchHistory: function(callback) {
 			this.$http.get('/data/champions/' + this.selectedChampion.id + '/history').then(function(response) {
 				// Format data
@@ -66,18 +72,20 @@ var app = new Vue({
 				this.historyStats = result;
 				callback();
 			}, function(response) {
-				// error
+				// error handling
 			});
 		},
 
 		/*
-		 * Search
+		 * Returns true if the searched text is included in champion name
 		 */
-
-		matchesNameSearch: function(name) {
-			return name.toLowerCase().includes(this.searchName.toLowerCase());
+		matchesNameSearch: function(championName) {
+			return championName.toLowerCase().includes(this.searchName.toLowerCase());
 		},
 
+		/*
+		 * Returns true if the searched tags are included in champion tags
+		 */
 		matchesTagSearch: function(championTags) {
 			var match = true;
 			this.searchTags.forEach(function(tag) {
@@ -89,9 +97,8 @@ var app = new Vue({
 		},
 
 		/*
-		 * Modal
+		 * Update the selected champion, opens the modal and load its content
 		 */
-
 		seeDetails: function(champion) {
 			this.selectedChampion = champion;
 			this.showModal = true;
@@ -101,11 +108,17 @@ var app = new Vue({
 			});
 		},
 
+		/*
+		 * Reset the selected champion and closes the modal
+		 */
 		closeDetails: function() {
 			this.selectedChampion = {};
 			this.showModal = false;
 		},
 
+		/*
+		 * Draws the chart of role percentages of the seleted champion
+		 */
 		setUpPositionChart: function() {
 			var ctx = document.getElementById("rolesChart");
 			var myChart = new Chart(ctx, {
@@ -143,6 +156,9 @@ var app = new Vue({
 			});
 		},
 
+		/*
+		 * Draws the chart of the selected champion popularity over time
+		 */
 		setUpPopularityChart: function() {
 			var ctx = document.getElementById('popularityChart');
 			var myChart = new Chart(ctx, {
@@ -162,11 +178,10 @@ var app = new Vue({
 		},
 
 		/*
-		 * Misc
+		 * Generate URL to champion portrait image from champion key
 		 */
-
-		portraitUrl: function(key) {
-			return "http://ddragon.leagueoflegends.com/cdn/7.2.1/img/champion/" + key + ".png";
+		portraitUrl: function(championKey) {
+			return "http://ddragon.leagueoflegends.com/cdn/7.2.1/img/champion/" + championKey + ".png";
 		}
 	}
 

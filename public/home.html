@@ -51,7 +51,7 @@
                     <button id="show-modal" @click="seeDetails(champion)" class="btn btn-link">{{ champion.name }}</button>
                 </div>
             </div>
-
+            <!-- Modal -->
             <div v-if="showModal" v-cloak>
                 <div class="modal-mask">
                     <div class="modal-dialog">
@@ -69,7 +69,6 @@
                     </div>
                 </div>
             </div>
-
         </div>
 
         <script src="https://unpkg.com/vue/dist/vue.js"></script>
