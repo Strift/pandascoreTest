@@ -6,16 +6,16 @@ var app = new Vue({
 		searchName: '',
 		searchTags: [],
 		champions: [],
-		matches: [],
 		showModal: false,
-		selectedChampion: {}
+		selectedChampion: {},
+		positionRate: {},
+		historyStats: {}
 	},
 
 	mounted: function () {
 		// When application is ready
 		this.$nextTick(function () {
 			this.fetchChampions();
-			this.fetchMatches();
 		});
 	},
 
@@ -44,9 +44,27 @@ var app = new Vue({
 			});
 		},
 
-		fetchMatches: function() {
-			this.$http.get('/data/matches').then(function(response) {
-				this.matches = response.body;
+		fetchPositions: function(callback) {
+			this.$http.get('/data/champions/' + this.selectedChampion.id + '/positions').then(function(response) {
+				this.positionRate = response.body;
+				callback();
+			}, function(response) {
+				// error
+			});
+		},
+
+		fetchHistory: function(callback) {
+			this.$http.get('/data/champions/' + this.selectedChampion.id + '/history').then(function(response) {
+				// Format data
+				var result = {
+					labels: Object.keys(response.body.total),
+					values: []
+				};
+				Object.keys(response.body.total).forEach(function(key) {
+					result.values.push(response.body.picks[key] / response.body.total[key] * 100);
+				});
+				this.historyStats = result;
+				callback();
 			}, function(response) {
 				// error
 			});
@@ -78,7 +96,8 @@ var app = new Vue({
 			this.selectedChampion = champion;
 			this.showModal = true;
 			this.$nextTick(function () {
-				this.setUpChart(this.getPositionPercentage(champion));
+				this.fetchPositions(this.setUpPositionChart);
+				this.fetchHistory(this.setUpPopularityChart);
 			});
 		},
 
@@ -87,31 +106,7 @@ var app = new Vue({
 			this.showModal = false;
 		},
 
-		getPositionPercentage: function(champion) {
-			var total = 0;
-			var percentages = { top: 0, jgl: 0, mid: 0, bot: 0 };
-			this.matches.forEach(function(match) {
-				if (match.champion == champion.id) {
-					total++;
-					if (match.lane == "TOP")
-						percentages.top++;
-					else if (match.lane == "JUNGLE")
-						percentages.jgl++;
-					else if (match.lane == "MIDDLE" || match.lane == "MID")
-						percentages.mid++;
-					else {
-						percentages.bot++;
-					}
-				}
-			});
-			percentages.top = Math.round(percentages.top * 100 / total);
-			percentages.jgl = Math.round(percentages.jgl * 100 / total);
-			percentages.mid = Math.round(percentages.mid * 100 / total);
-			percentages.bot = Math.round(percentages.bot * 100 / total);
-			return percentages;
-		},
-
-		setUpChart: function(positionPercentage) {
+		setUpPositionChart: function() {
 			var ctx = document.getElementById("rolesChart");
 			var myChart = new Chart(ctx, {
 			    type: 'bar',
@@ -119,7 +114,7 @@ var app = new Vue({
 			        labels: ["Top", "Jungle", "Mid", "Bottom"],
 			        datasets: [{
 			            label: 'Position occurence in percent',
-			            data: [positionPercentage.top, positionPercentage.jgl, positionPercentage.mid, positionPercentage.bot],
+			            data: [this.positionRate.top, this.positionRate.jgl, this.positionRate.mid, this.positionRate.bot],
 			            backgroundColor: [
 			                'rgba(255, 99, 132, 0.2)',
 			                'rgba(54, 162, 235, 0.2)',
@@ -144,6 +139,24 @@ var app = new Vue({
 			                }
 			            }]
 			        }
+			    }
+			});
+		},
+
+		setUpPopularityChart: function() {
+			var ctx = document.getElementById('popularityChart');
+			var myChart = new Chart(ctx, {
+				type: 'line',
+				data: {
+					labels: this.historyStats.label,
+					datasets: [{
+						label: 'apples',
+						data: this.historyStats.values,
+						backgroundColor: "rgba(153,255,51,0.4)"
+					}]
+				},
+			    options: {
+			        responsive: false
 			    }
 			});
 		},

@@ -15,7 +15,8 @@
     <body>
         <h1>Home</h1>
 
-        <div id="app">            
+        <div id="app">   
+
             <input v-model="searchName" type="text" placeholder="Search champions"/>
 
             <input type="checkbox" id="assassin" value="Assassin" v-model="searchTags">
@@ -47,6 +48,7 @@
                             </div>
                             <div class="modal-body">
                                 <canvas id="rolesChart" width="400" height="400"></canvas>
+                                <canvas id="popularityChart" width="400" height="400"></canvas> 
                             </div>
                             <div class="modal-footer">
                                 The data is not precise enough to determine if botlane picks are ADC or supports.
