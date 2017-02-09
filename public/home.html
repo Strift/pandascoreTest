@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <title>Pandascore technical test</title>
+
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+        <link rel="stylesheet" href="./css/home.css"/>
+    </head>
+    <body>
+        <div id="app" class="container"> 
+            <h1>Home</h1>
+            <h2>Filters</h2>
+            <form class="form-inline">
+                <div class="form-group">
+                    <input v-model="searchName" id="searchName" type="text" placeholder="Search champions" class="form-control"/>
+                </div>
+                <div class="form-group">
+                    <div class="checkbox">
+                        <input type="checkbox" id="assassin" value="Assassin" v-model="searchTags">
+                        <label for="assassin">Assassin</label>
+                    </div>
+                    <div class="checkbox">
+                        <input type="checkbox" id="fighter" value="Fighter" v-model="searchTags">
+                        <label for="fighter">Fighter</label>
+                    </div>
+                    <div class="checkbox">
+                        <input type="checkbox" id="mage" value="Mage" v-model="searchTags">
+                        <label for="mage">Mage</label>
+                    </div>
+                    <div class="checkbox">
+                        <input type="checkbox" id="support" value="Support" v-model="searchTags">
+                        <label for="support">Support</label>
+                    </div>
+                    <div class="checkbox">
+                        <input type="checkbox" id="tank" value="Tank" v-model="searchTags">
+                        <label for="tank">Tank</label>
+                    </div>
+                    <div class="checkbox">
+                        <input type="checkbox" id="marksman" value="Marksman" v-model="searchTags">
+                        <label for="marksman">Marksman</label>
+                    </div>
+                </div>
+            </form>
+            <h2>Results</h2>
+            <div v-cloak>
+                <div v-for="champion in sortedChampionList" v-if="matchesNameSearch(champion.name) && matchesTagSearch(champion.tags)" class="col-md-2 col-sm-3 col-xs-6">
+                    <img v-bind:src="portraitUrl(champion.key)"/><br/>
+                    <button id="show-modal" @click="seeDetails(champion)" class="btn btn-link">{{ champion.name }}</button>
+                </div>
+            </div>
+            <!-- Modal -->
+            <div v-if="showModal" v-cloak>
+                <div class="modal-mask">
+                    <div class="modal-dialog">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <button type="button" class="close" @click="closeDetails()">&times;</button>
+                                <h3>{{ selectedChampion.name }} details</h3>
+                            </div>
+                            <div class="modal-body">
+                                <canvas id="rolesChart" width="300" height="300"></canvas>
+                                <canvas id="popularityChart" width="300" height="300"></canvas> 
+                                <p class="small">The data is not precise enough to determine if botlane picks are ADC or supports.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <script src="https://unpkg.com/vue/dist/vue.js"></script>
+        <script src="https://unpkg.com/vue-resource@1.2.0/dist/vue-resource.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.5.0/Chart.bundle.js"></script>
+        <script type="text/javascript" src="./js/home.js"></script>
+    </body>
+</html>
