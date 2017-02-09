@@ -32,11 +32,11 @@ var app = new Vue({
 	},
 
 	methods: {
+
 		/*
 		 * API requests
 		 */
-
-		fetchChampions: function() {
+		fetchChampions: function(callback) {
 			this.$http.get('/data/champions').then(function(response) {
 				this.champions = response.body;
 			}, function(response) {
@@ -150,7 +150,7 @@ var app = new Vue({
 				data: {
 					labels: this.historyStats.label,
 					datasets: [{
-						label: 'apples',
+						label: 'Pick percentage over time',
 						data: this.historyStats.values,
 						backgroundColor: "rgba(153,255,51,0.4)"
 					}]
