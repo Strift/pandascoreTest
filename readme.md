@@ -95,6 +95,34 @@ sudo ufw allow 'Nginx Full'
 
 ```
 
-We're done! Enjoy.
+We're done!
+
+##Dockerization
+
+Please note that the docker configuration exists only on the 'docker' branch.
+
+###Requirements
+
+- Install Docker.
+
+###Building the image
+
+Go to the application directory where the Dockerfile is located and run the following command to build the Docker image.
+
+```
+sudo docker build -t panda-showcase .
+```
+
+###Running the image
+
+To run the docker image, we should redirect a public port, let's say 49160, to the private port 2020 inside the container. Use the command below to run the image in the background.
+
+Note: I chose not to save the port mapping in the Dockerfile, as it would make it impossible to run several instances of the app on the host. 
+
+```
+docker run -p 49160:2020 -d pandascore
+```
+
+And it's done ! Enjoy.
 
 Any issues? Reach me out at lau.cazanove@gmail.com :)
