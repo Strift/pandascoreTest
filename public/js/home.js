@@ -1,3 +1,7 @@
+Vue.component('modal', {
+  template: '#modal-template'
+});
+
 var app = new Vue({
 
 	el: '#app',
@@ -5,7 +9,9 @@ var app = new Vue({
 	data: {
 		searchName: '',
 		searchTags: [],
-		champions: []
+		champions: [],
+		showModal: false,
+		selectedChampion: {}
 	},
 
 	mounted: function () {
@@ -28,6 +34,10 @@ var app = new Vue({
 	},
 
 	methods: {
+		/*
+		 * API requests
+		 */
+
 		fetchChampions: function() {
 			this.$http.get('/data/champions').then(function(response) {
 				this.champions = response.body;
@@ -35,6 +45,10 @@ var app = new Vue({
 				// error
 			});
 		},
+
+		/*
+		 * Search
+		 */
 
 		matchesNameSearch: function(name) {
 			return name.toLowerCase().includes(this.searchName.toLowerCase());
@@ -49,6 +63,24 @@ var app = new Vue({
 			});
 			return match;
 		},
+
+		/*
+		 * Modal
+		 */
+
+		seeDetails: function(champion) {
+			this.selectedChampion = champion;
+			this.showModal = true;
+		},
+
+		closeDetails: function() {
+			this.selectedChampion = {};
+			this.showModal = false;
+		},
+
+		/*
+		 * Misc
+		 */
 
 		portraitUrl: function(key) {
 			return "http://ddragon.leagueoflegends.com/cdn/7.2.1/img/champion/" + key + ".png";

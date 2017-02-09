@@ -10,9 +10,43 @@
         <!-- Fonts -->
 
         <!-- Styles -->
+        <link rel="stylesheet" href="./css/home.css"/>
     </head>
     <body>
         <h1>Home</h1>
+
+        <!-- template for the modal component -->
+        <script type="text/x-template" id="modal-template">
+            <transition name="modal">
+                <div class="modal-mask">
+                    <div class="modal-wrapper">
+                        <div class="modal-container">
+
+                            <div class="modal-header">
+                                <slot name="header">
+                                </slot>
+                            </div>
+
+                            <div class="modal-body">
+                                <slot name="body">
+                                    Default body
+                                </slot>
+                            </div>
+
+                            <div class="modal-footer">
+                                <slot name="footer">
+                                    Default footer
+                                    <button class="modal-default-button" @click="$emit('close')">
+                                        Close
+                                    </button>
+                                </slot>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </transition>
+        </script>
+
         <div id="app">
             <input v-model="searchName" type="text" placeholder="Search champions"/>
 
@@ -32,13 +66,18 @@
             <ul>
                 <div v-for="champion in sortedChampionList" v-if="matchesNameSearch(champion.name) && matchesTagSearch(champion.tags)">
                     <img v-bind:src="portraitUrl(champion.key)"/>
-                    <span>{{ champion.name }}</span>
+                    <button id="show-modal" @click="seeDetails(champion)">{{ champion.name }}</button>
                 </div>
             </ul>
+
+            <modal v-if="showModal" @close="closeDetails()">
+                <h3 slot="header">{{ selectedChampion.name }} details</h3>
+            </modal>
         </div>
 
         <script src="https://unpkg.com/vue/dist/vue.js"></script>
         <script src="https://unpkg.com/vue-resource@1.2.0/dist/vue-resource.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.5.0/Chart.bundle.js"></script>
         <script type="text/javascript" src="./js/home.js"></script>
     </body>
 </html>
